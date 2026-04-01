@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Table — Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #1A1A2E;
+      --surface: #22223A;
+      --primary: #38418C;
+      --accent: #E8C831;
+      --text: #E0E0E0;
+      --text-secondary: #A0A0B0;
+      --border: #333355;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 0 16px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+    .lang-switcher {
+      text-align: right;
+      margin-bottom: 24px;
+    }
+    .lang-switcher a {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .lang-switcher a:hover {
+      background: var(--surface);
+    }
+    h1 {
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: var(--accent);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    h2 {
+      font-size: 20px;
+      color: #fff;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    p, li {
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+    li { margin-bottom: 6px; }
+    strong { color: #fff; }
+    .highlight {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin: 16px 0;
+    }
+    .contact-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    .contact-box a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="lang-switcher">
+      <a href="index.html">🇪🇸 Español</a>
+    </div>
+
+    <h1>Privacy Policy</h1>
+    <p class="subtitle">Smart Table — Last updated: April 1, 2026</p>
+
+    <h2>1. Introduction</h2>
+    <p>
+      <strong>Smart Table</strong> is a mobile application developed by
+      <strong>Daniel Martínez Salinas</strong> that allows users to control
+      motorized standing desks via a direct Bluetooth Low Energy (BLE)
+      connection.
+    </p>
+    <p>
+      This privacy policy describes how the application handles user
+      information. We are committed to protecting your privacy and being
+      transparent about data practices.
+    </p>
+
+    <h2>2. Data We Collect</h2>
+    <div class="highlight">
+      <strong>Smart Table does not collect, store, or transmit any personal
+      data to external servers.</strong>
+    </div>
+    <p>The application works entirely locally on your device:</p>
+    <ul>
+      <li>There are no cloud servers or Internet connections.</li>
+      <li>No user accounts are created.</li>
+      <li>No personally identifiable information is collected.</li>
+      <li>No analytics, advertising, or tracking services are used.</li>
+    </ul>
+
+    <h2>3. Information Stored Locally</h2>
+    <p>
+      The application stores the following information exclusively on your
+      device:
+    </p>
+    <ul>
+      <li><strong>Paired device identifiers:</strong> the serial code and
+        Bluetooth MAC address of each paired desk.</li>
+      <li><strong>Custom names:</strong> names you assign to your desks
+        (e.g., "Office desk").</li>
+      <li><strong>Preferences:</strong> movement presets and application
+        settings.</li>
+    </ul>
+    <p>
+      This data is stored only in the device's internal storage
+      (SharedPreferences) and is <strong>never sent to any server</strong>.
+      Uninstalling the application automatically deletes all this data.
+    </p>
+
+    <h2>4. Device Permissions</h2>
+    <p>Smart Table requests the following permissions, all for local functionality only:</p>
+
+    <ul>
+      <li>
+        <strong>Bluetooth:</strong> required to connect to and control your
+        standing desk. Communication is direct device-to-device, with no
+        intermediaries.
+      </li>
+      <li>
+        <strong>Camera:</strong> used exclusively to scan the QR code on your
+        desk during the pairing process. No photos are taken and no video is
+        recorded.
+      </li>
+      <li>
+        <strong>Microphone and Speech Recognition:</strong> used exclusively
+        for the voice command feature ("raise", "lower", "stop"). Voice
+        processing is performed locally on your device. No audio is recorded
+        or transmitted.
+      </li>
+    </ul>
+
+    <h2>5. Third-Party Data Sharing</h2>
+    <div class="highlight">
+      <strong>We do not share any data with third parties.</strong> The
+      application does not contain advertising, analytics, or social media
+      SDKs.
+    </div>
+
+    <h2>6. Security</h2>
+    <p>
+      Since no personal data is collected or transmitted, data security risks
+      are minimal. The Bluetooth communication between the application and the
+      desk uses the standard BLE security mechanisms provided by the operating
+      system.
+    </p>
+
+    <h2>7. Children's Privacy</h2>
+    <p>
+      Smart Table is not intended for children under 13 and does not knowingly
+      collect information from minors. The application controls motorized
+      equipment and should be used by adults only.
+    </p>
+
+    <h2>8. Changes to This Policy</h2>
+    <p>
+      We may update this privacy policy from time to time. We will notify you
+      of any changes by posting the new policy on this page with the
+      corresponding update date.
+    </p>
+
+    <h2>9. Contact Us</h2>
+    <p>
+      If you have questions about this privacy policy, you can reach us at:
+    </p>
+    <div class="contact-box">
+      <p><strong>Daniel Martínez Salinas</strong></p>
+      <p>Email: <a href="mailto:soporte@nexotechnologies.es">soporte@nexotechnologies.es</a></p>
+    </div>
+
+    <div class="footer">
+      © 2026 Daniel Martínez Salinas · Smart Table App
+    </div>
+  </div>
+</body>
+</html>
