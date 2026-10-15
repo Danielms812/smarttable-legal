@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiHogar — Soporte</title>
+  <style>
+    :root {
+      --bg: #1A1A2E;
+      --surface: #22223A;
+      --accent: #E8C831;
+      --text: #E0E0E0;
+      --text-secondary: #A0A0B0;
+      --border: #333355;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 0 16px;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 40px 0 80px; }
+    h1 { font-size: 28px; color: #fff; margin-bottom: 8px; }
+    .subtitle { color: var(--accent); font-size: 14px; margin-bottom: 32px; }
+    h2 {
+      font-size: 20px; color: #fff; margin-top: 32px; margin-bottom: 12px;
+      padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    }
+    p, li { margin-bottom: 10px; }
+    ul { padding-left: 24px; margin-bottom: 16px; }
+    strong { color: #fff; }
+    a { color: var(--accent); text-decoration: none; }
+    .contact-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px; margin-top: 16px;
+    }
+    .footer {
+      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 13px; text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Soporte</h1>
+    <p class="subtitle">MiHogar — control por Bluetooth de mesas, camas y luces</p>
+
+    <h2>Contacto</h2>
+    <div class="contact-box">
+      <p><strong>Daniel Martínez Salinas</strong></p>
+      <p>Email: <a href="mailto:soporte@nexotechnologies.es">soporte@nexotechnologies.es</a></p>
+    </div>
+
+    <h2>Preguntas frecuentes</h2>
+    <ul>
+      <li><strong>¿Qué necesito?</strong> Un dispositivo compatible (mesa elevable,
+        cama abatible o luz) con su etiqueta QR, y el Bluetooth del móvil activado.</li>
+      <li><strong>¿Cómo vinculo un dispositivo?</strong> Pulsa <em>+</em> en la pantalla
+        principal y escanea el QR de la etiqueta, o introduce el código de serie a mano.</li>
+      <li><strong>No conecta.</strong> Acércate a menos de 10 m, comprueba que el
+        dispositivo tiene alimentación y pulsa <em>Reintentar</em>.</li>
+      <li><strong>Siri no reconoce mi frase.</strong> Usa nombres distintivos
+        ("oficina", "salón") y vuelve a grabar la frase desde
+        <em>Comandos de voz (Siri)</em> en la pantalla de control.</li>
+      <li><strong>¿Necesito cuenta o Internet?</strong> No. El control es directo por
+        Bluetooth, sin cuentas ni servidores.</li>
+    </ul>
+
+    <h2>Privacidad</h2>
+    <p>Consulta la <a href="index.html">política de privacidad</a>.</p>
+
+    <div class="footer">
+      © 2026 Daniel Martínez Salinas · MiHogar
+    </div>
+  </div>
+</body>
+</html>

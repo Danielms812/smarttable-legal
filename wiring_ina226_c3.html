@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>SmartTable — Diagrama de conexiones (ESP32-C3 + INA226 + H-Bridge NMOS + MP4560)</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1c2128;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --warn: #f0883e;
+    --ok: #3fb950;
+    --bat-pos: #f85149;
+    --bat-neg: #1f6feb;
+    --signal: #bc8cff;
+    --i2c: #ffd86b;
+    --pwm: #3fb950;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px; background: var(--bg); color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    line-height: 1.45;
+  }
+  h1 { color: var(--accent); margin-top: 0; font-size: 1.6em; }
+  h2 { color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-top: 32px; }
+  h3 { color: var(--warn); margin-top: 20px; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 22px; margin: 14px 0;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 0.92em; }
+  th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+  th { color: var(--accent); font-weight: 600; }
+  code, .pin {
+    background: #2d333b; color: #ffd86b; padding: 1px 6px;
+    border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 0.9em;
+  }
+  .warn { color: var(--warn); }
+  .ok   { color: var(--ok); }
+  .muted { color: var(--muted); font-size: 0.88em; }
+  .ascii {
+    font-family: ui-monospace, Menlo, monospace; white-space: pre;
+    background: #0d1117; padding: 14px; border-radius: 6px;
+    border: 1px solid var(--border); overflow-x: auto; font-size: 12px; line-height: 1.35;
+  }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0; font-size: 0.9em; }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 14px; height: 4px; display: inline-block; border-radius: 2px; }
+  ul { margin: 6px 0 6px 22px; }
+  li { margin: 3px 0; }
+  .tag {
+    display: inline-block; font-size: 0.78em; padding: 1px 7px;
+    border-radius: 10px; background: #2d333b; color: var(--muted); margin-left: 6px;
+  }
+  .tag.crit { background: #5a1f1f; color: #ffaaaa; }
+  .tag.opt  { background: #1f3a5a; color: #9ccfff; }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<h1>SmartTable — Diagrama de conexiones de potencia y señal</h1>
+<p class="muted">
+  ESP32-C3-MINI-1 + INA226 (HW-899, shunt R100) + H-Bridge NMOS 170 W + MP4560 (buck 3.3 V) +
+  motor DC 29 V / 2 A nominal — 4 A pico.
+</p>
+
+<div class="legend">
+  <span><span class="swatch" style="background:var(--bat-pos)"></span> +Vbat (29 V)</span>
+  <span><span class="swatch" style="background:var(--bat-neg)"></span> GND potencia</span>
+  <span><span class="swatch" style="background:var(--pwm)"></span> PWM / Lógica</span>
+  <span><span class="swatch" style="background:var(--i2c)"></span> I²C</span>
+  <span><span class="swatch" style="background:var(--signal)"></span> Señal digital</span>
+</div>
+
+<h2>1. Diagrama de bloques (vista global)</h2>
+
+<div class="ascii">
+                          ┌──────────────────────────────────────┐
+        +Vbat 29 V ──┬──► │  INA226 HW-899                       │
+        (24-40 V)    │    │  ┌────┐                              │
+                     │    │  │R100│ shunt 0.1 Ω, en serie con +V │
+                     │    │  └────┘                              │
+                     │    │  IN+      IN-     VBS   VCC GND      │
+                     │    └───┬────────┬───────┬─────┬───┬───────┘
+                     │        │ shunt  │        │ (3V3)│
+                     │        │ a Vbus │        │       │
+                     │   IN+──┤        ├──IN- ──┴──► al H-bridge VBAT+
+                     │   (de  │        │ (hacia driver)
+                     │   batería)
+                     │
+                     │                    ┌─────────────────────────┐
+                     ├───────────────────►│ MP4560 buck 29V → 3.3V  │──► 3V3 rail
+                     │                    └─────────────────────────┘     │
+                     │                                                    │
+                     │   ┌──────────────────────────────────────┐         │
+                     └──►│ H-Bridge NMOS 170W (módulo AliExp.)  │         │
+                         │  VBAT+ ◄── desde IN- del INA226      │         │
+                         │  GND   ◄── GND potencia              │         │
+                         │  MA, MB ── salida al MOTOR DC        │         │
+                         │  PWM1, PWM2, EN  ◄── lógica del MCU  │         │
+                         └────┬────┬────┬─────────────────────────┘       │
+                              │    │    │                                 │
+                  ┌───────────┴────┴────┴────────────────────────┐        │
+                  │             ESP32-C3-MINI-1                  │ ◄──────┘ 3V3
+                  │                                              │
+                  │  GPIO6  ─► PWM1 (subir)                      │
+                  │  GPIO7  ─► PWM2 (bajar)                      │
+                  │  GPIO3  ─► EN                                │
+                  │  GPIO10 ◄─► SDA  ─┐                          │
+                  │  GPIO4  ──► SCL  ─┴─► I²C al INA226          │
+                  │  GPIO1  ◄── ALERT (INA226 overcurrent HW)    │
+                  │  GPIO5     LIBRE (sugerido: botón TEST mode) │
+                  │  GPIO8     LIBRE (sugerido: LED actividad)   │
+                  │  GPIO9     BOOT (NO conectar a nada en run)  │
+                  │  GND ─────── GND única, estrella en INA226   │
+                  └──────────────────────────────────────────────┘
+</div>
+
+<h2>2. Cableado de potencia <span class="tag crit">CRÍTICO</span></h2>
+
+<div class="panel">
+  <h3>Camino de la corriente del motor</h3>
+  <ol>
+    <li><strong>Batería +</strong> → cable rojo grueso (≥1.5 mm²) → <strong>INA226 IN+</strong></li>
+    <li><strong>INA226 IN-</strong> → cable rojo grueso → <strong>H-Bridge VBAT+</strong></li>
+    <li><strong>H-Bridge MA / MB</strong> → cables al <strong>MOTOR</strong> (≥1.5 mm²)</li>
+    <li><strong>H-Bridge GND</strong> → cable negro grueso → <strong>Batería −</strong></li>
+  </ol>
+  <p class="warn">
+    ⚠ El INA226 va <strong>siempre en el lado de alta (high-side)</strong>, antes del puente H.
+    Si lo pones en el retorno (low-side) o después del puente, los signos cambian con la dirección
+    y la masa se ensucia. En esta configuración la corriente del motor SIEMPRE entra por IN+ y sale por IN-,
+    independientemente del sentido de giro.
+  </p>
+</div>
+
+<div class="panel">
+  <h3>Alimentación del MCU (MP4560)</h3>
+  <ul>
+    <li><strong>MP4560 VIN</strong> ← directamente del <strong>+Vbat</strong> (acepta hasta 55 V, sobra margen).</li>
+    <li><strong>MP4560 VOUT</strong> → <strong>3.3 V</strong> regulado al ESP32-C3.</li>
+    <li><strong>MP4560 GND</strong> → GND potencia (ver punto de estrella abajo).</li>
+    <li>Salida ajustada con el potenciómetro a <strong>3.30 ± 0.05 V</strong> antes de conectar el ESP32.
+        <span class="warn">¡Mide con multímetro sin carga antes!</span></li>
+    <li>Condensadores adicionales recomendados:
+      <ul>
+        <li><strong>10 µF cerámico + 100 nF</strong> en VOUT muy cerca del pin 3V3 del C3.</li>
+        <li><strong>100 µF electrolítico</strong> en VIN del MP4560 si los cables a la batería son largos (&gt;30 cm).</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h3>Filtrado del ruido PWM del motor <span class="tag crit">CRÍTICO para estabilidad INA226</span></h3>
+  <p>
+    El puente NMOS conmuta a alta frecuencia (PWM 20 kHz). Sin filtrado, verás picos de corriente
+    de varios A en cada flanco, que aunque el INA226 los promedie internamente,
+    saturan el shunt y deforman la lectura.
+  </p>
+  <ul>
+    <li><strong>Snubber en los bornes del motor</strong>: <code>100 nF cerámico X7R 100 V</code> + <code>10 Ω 1 W</code> en serie,
+        en paralelo al motor (RC snubber clásico).</li>
+    <li><strong>Bulk cap en VBAT+ del H-bridge</strong>: <code>470 µF / 50 V electrolítico low-ESR</code> +
+        <code>100 nF cerámico</code> en paralelo, lo más cerca posible de los pines VBAT+/GND del módulo.</li>
+    <li>Diodos flyback: el módulo NMOS los lleva integrados (body-diode de los MOSFETs). No hay que añadir.</li>
+  </ul>
+</div>
+
+<h2>3. Cableado de señal (ESP32-C3 ↔ H-Bridge ↔ INA226)</h2>
+
+<table>
+  <tr>
+    <th>GPIO C3</th><th>Función</th><th>Destino</th><th>Tipo</th><th>Notas</th>
+  </tr>
+  <tr><td><span class="pin">GPIO6</span></td><td>PWM1 (subir)</td><td>H-Bridge PWM A</td><td>PWM 20 kHz</td><td>Activo HIGH durante subida</td></tr>
+  <tr><td><span class="pin">GPIO7</span></td><td>PWM2 (bajar)</td><td>H-Bridge PWM B</td><td>PWM 20 kHz</td><td>Activo HIGH durante bajada</td></tr>
+  <tr><td><span class="pin">GPIO3</span></td><td>EN (enable)</td><td>H-Bridge EN</td><td>Digital</td><td>HIGH = driver habilitado</td></tr>
+  <tr><td><span class="pin">GPIO10</span></td><td>I²C SDA</td><td>INA226 SDA</td><td>I²C 400 kHz</td><td>10 kΩ ya en módulo</td></tr>
+  <tr><td><span class="pin">GPIO4</span></td><td>I²C SCL</td><td>INA226 SCL</td><td>I²C 400 kHz</td><td>10 kΩ ya en módulo</td></tr>
+  <tr><td><span class="pin">GPIO1</span></td><td>ALERT</td><td>INA226 ALE</td><td>IRQ flanco bajo</td><td>Open-drain, activa pull-up interna</td></tr>
+  <tr><td><span class="pin">GPIO5</span></td><td><strong>LIBRE</strong></td><td>—</td><td>Digital I/O</td><td>Reservado para botón físico de TEST mode (start/stop ciclado)</td></tr>
+  <tr><td><span class="pin">GPIO8</span></td><td><strong>LIBRE</strong></td><td>—</td><td>Digital out</td><td>Reservado para LED de actividad del TEST mode. <span class="warn">Strapping</span>: pull-up 10 kΩ a 3V3 obligatorio; usar LED activo-LOW.</td></tr>
+  <tr><td><span class="pin">GPIO9</span></td><td>BOOT</td><td>(pulsador BOOT)</td><td>—</td><td>Sólo flash. NO conectar en runtime.</td></tr>
+  <tr><td><span class="pin">GPIO2</span></td><td>(strapping)</td><td>—</td><td>—</td><td>10 kΩ a 3V3 obligatorio en PCB</td></tr>
+</table>
+
+<div class="panel">
+  <h3>Notas sobre GPIO5 y GPIO8 <span class="tag opt">opcional</span></h3>
+  <p>
+    Aunque <code>config.h</code> los tiene asignados a <code>PIN_EMERGENCY_STOP</code> y <code>PIN_LED_STATUS</code>,
+    en el hardware actual <strong>no están cableados</strong>. Quedan disponibles para:
+  </p>
+  <ul>
+    <li><strong>GPIO5 → Botón TEST</strong>: pulsador a 3V3 con pull-down 10 kΩ a GND. Permite arrancar/parar
+        ciclos automáticos sin necesidad de la app BLE. Si se mantiene pulsado &gt;3 s, aborta el test en curso.</li>
+    <li><strong>GPIO8 → LED actividad TEST</strong>: LED en serie con 470 Ω entre 3V3 y GPIO8 (activo-LOW).
+        Aprovecha el pull-up 10 kΩ obligatorio de strapping → el LED arranca apagado en el boot, sin glitches.
+        Patrones sugeridos: parpadeo lento (1 Hz) = test corriendo, fijo apagado = idle, parpadeo rápido (5 Hz) = error.</li>
+    <li><strong>Bus I²C compartido</strong>: GPIO10/GPIO4 soportan más esclavos (p.ej. un segundo INA226 con dirección
+        distinta para medir la entrada de batería, o una EEPROM para log local) sin GPIO adicionales.</li>
+  </ul>
+</div>
+
+<h3>Conexiones detalladas del INA226 HW-899</h3>
+
+<table>
+  <tr><th>Pin módulo</th><th>Va a</th><th>Tipo cable / observaciones</th></tr>
+  <tr><td><strong>IN+</strong></td><td>+Vbat (batería)</td><td>Cable rojo grueso, par trenzado opcional con IN-</td></tr>
+  <tr><td><strong>IN-</strong></td><td>H-Bridge VBAT+</td><td>Cable rojo grueso. La corriente del motor pasa por el shunt entre IN+ e IN-.</td></tr>
+  <tr><td><strong>VBS</strong></td><td>Puente a <strong>IN+</strong></td><td>Cable fino. Habilita lectura del voltaje de bus (batería) sin coste extra.</td></tr>
+  <tr><td><strong>VCC</strong></td><td>3.3 V del MP4560</td><td>Cable fino. <span class="warn">NO usar 5 V</span> (no hay 5 V en el sistema, y el INA226 acepta 3.3 V).</td></tr>
+  <tr><td><strong>GND</strong></td><td>GND del MCU, vía estrella</td><td><strong>Cable independiente</strong>, NO compartir con el retorno de potencia del motor.</td></tr>
+  <tr><td><strong>SDA</strong></td><td>GPIO10 del C3</td><td>Trenzado con SCL y una masa de referencia. Longitud &lt;30 cm.</td></tr>
+  <tr><td><strong>SCL</strong></td><td>GPIO4 del C3</td><td>Idem SDA.</td></tr>
+  <tr><td><strong>ALE</strong></td><td>GPIO1 del C3</td><td>Open-drain. Pull-up interna del C3 + 10k en módulo. Interrupt por flanco bajo.</td></tr>
+</table>
+
+<h2>4. Punto de masa en estrella <span class="tag crit">imprescindible</span></h2>
+
+<div class="ascii">
+                          PUNTO ÚNICO DE UNIÓN
+                                  │
+                                  ●  ◄── soldar las 3 masas juntas aquí
+                                 /│\
+                                / │ \
+                               /  │  \
+                              /   │   \
+                             /    │    \
+                Batería −   MP4560 GND  H-Bridge GND
+                          (vuelve por aquí toda la corriente del motor)
+
+           Desde ese punto único:
+              ── GND fina ──► INA226 GND
+              ── GND fina ──► ESP32-C3 GND
+              (señales lógicas comparten ese mismo retorno)
+</div>
+
+<div class="panel">
+  <p>
+    El error más común es enchufar el GND del INA226 o del ESP32 al GND del H-Bridge directamente.
+    La corriente del motor (hasta 4 A) cae &gt;100 mV en cualquier pista o cable que comparta con esas masas,
+    y esa caída se suma a la lectura del INA226 como ruido común y descalibración.
+  </p>
+  <p class="ok">
+    ✓ Solución: une <strong>Batería −, MP4560 GND y H-Bridge GND en un solo punto físico</strong>
+    (terminal, tornillo o pad PCB). Desde ahí salen cables separados, finos, hacia GND del INA226 y del ESP32.
+    Las señales lógicas (PWM, SDA, SCL, ALERT, etc.) usan esa masa "limpia".
+  </p>
+</div>
+
+<h2>5. Configuración recomendada del módulo H-Bridge</h2>
+
+<div class="panel">
+  <p>El módulo de AliExpress (4 NMOS + driver dual PWM) admite dos modos de control:</p>
+  <ul>
+    <li><strong>Modo "drive/brake"</strong>: una entrada selecciona dirección, la otra entrada PWM controla velocidad.</li>
+    <li><strong>Modo "dual PWM"</strong> (recomendado): cada entrada es la PWM de una rama; mantener la opuesta en LOW.</li>
+  </ul>
+  <p>Con el firmware actual ya usas <strong>dual PWM</strong>:</p>
+  <ul>
+    <li>Subir: GPIO6 → PWM (rampa 0→98 %), GPIO7 = 0.</li>
+    <li>Bajar: GPIO7 → PWM (rampa 0→98 %), GPIO6 = 0.</li>
+    <li>Parar (coast): GPIO6 = GPIO7 = 0.</li>
+    <li>Frenado activo (no usado por desgaste mecánico): GPIO6 = GPIO7 = 1 brevemente.</li>
+  </ul>
+  <p class="warn">
+    ⚠ <strong>Dead-time obligatorio</strong> al invertir dirección: pon a 0 ambas PWM durante ≥300 ms
+    (ya está en <code>MOTOR_REVERSAL_DEAD_MS</code>) antes de cambiar de subida a bajada o viceversa.
+    Si no, hay cortocircuito shoot-through en una rama del puente.
+  </p>
+</div>
+
+<h2>6. Resumen de orden de montaje recomendado</h2>
+
+<ol>
+  <li><strong>Sin batería</strong>: cablea solo el ESP32-C3 al INA226 (3V3, GND, SDA, SCL, ALERT) con un USB.
+      Flashea el firmware del entorno <code>esp32c3_ina_test</code>.
+      <span class="ok">Debes ver en consola: <code>INA226 detectado @ 0x40 (MID=0x5449)</code></span>
+      y lecturas a 0 A / 0 V (no hay corriente todavía).</li>
+  <li>Cablea el MP4560: VIN ← batería (a través de un fusible 5 A en serie con el +Vbat es muy recomendable),
+      VOUT ajustado a 3.3 V. <strong>Mide con multímetro</strong>. Sólo entonces conecta el ESP32 al 3V3 del MP4560
+      y desconecta el USB.</li>
+  <li>Cablea el INA226 en serie con el H-Bridge VBAT+. Conecta el motor.</li>
+  <li>Punto de estrella de masas establecido (paso crítico).</li>
+  <li>Snubber en motor + bulk caps en VBAT+ del puente.</li>
+  <li>Comprueba con el firmware de test: deberías ver corriente reposo &lt; 10 mA (consumo del ESP32 + INA226),
+      y al mover el motor manualmente con un comando, ver el perfil de bajada estable en torno a 500 mA.</li>
+  <li>Una vez validado, recompila con el entorno <code>esp32c3</code> normal e integra el INA226
+      en <code>motor_controller.c</code> (paso 2 del plan general).</li>
+</ol>
+
+<hr>
+
+<h2>Apéndice: protección eléctrica</h2>
+
+<ul>
+  <li><strong>Fusible 5 A rápido</strong> en serie con +Vbat (entre batería e INA226 IN+).</li>
+  <li><strong>TVS bidireccional 33 V</strong> (p.ej. SMBJ33CA) en paralelo a la batería, cerca del INA226.</li>
+  <li><strong>Diodo de protección contra inversión de polaridad</strong> de la batería (Schottky 5 A o MOSFET P-channel ideal-diode).</li>
+  <li>El INA226 tolera hasta 36 V common-mode → tu Vbat de 29 V está dentro de rango con margen.</li>
+</ul>
+
+<p class="muted">
+  Documento generado para el proyecto SmartTable. Ajusta valores y modelos exactos
+  al revisar los datasheets concretos de tu placa H-bridge y de tu MP4560.
+</p>
+
+</body>
+</html>

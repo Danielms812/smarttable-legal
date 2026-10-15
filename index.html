@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Table — Política de Privacidad</title>
+  <title>MiHogar — Política de Privacidad</title>
   <style>
     :root {
       --bg: #1A1A2E;
@@ -106,13 +106,14 @@
     </div>
 
     <h1>Política de Privacidad</h1>
-    <p class="subtitle">Smart Table — Última actualización: 1 de abril de 2026</p>
+    <p class="subtitle">MiHogar — Última actualización: 6 de octubre de 2026</p>
 
     <h2>1. Introducción</h2>
     <p>
-      <strong>Smart Table</strong> es una aplicación móvil desarrollada por
+      <strong>MiHogar</strong> es una aplicación móvil para iOS y Android desarrollada por
       <strong>Daniel Martínez Salinas</strong> que permite controlar mesas
-      elevables motorizadas mediante conexión Bluetooth Low Energy (BLE) directa.
+      elevables, camas abatibles y luces mediante conexión Bluetooth Low
+      Energy (BLE) directa.
     </p>
     <p>
       Esta política de privacidad describe cómo la aplicación gestiona la
@@ -122,15 +123,15 @@
 
     <h2>2. Datos que recopilamos</h2>
     <div class="highlight">
-      <strong>Smart Table no recopila, almacena ni transmite ningún dato personal
-      a servidores externos.</strong>
+      <strong>MiHogar no recopila, almacena ni transmite ningún dato personal
+      a nuestros servidores.</strong>
     </div>
     <p>La aplicación funciona completamente de forma local en su dispositivo:</p>
     <ul>
-      <li>No hay servidores en la nube ni conexión a Internet.</li>
+      <li>No tenemos servidores en la nube: el control es directo por Bluetooth.</li>
       <li>No se crean cuentas de usuario.</li>
       <li>No se recoge información de identificación personal.</li>
-      <li>No se utilizan servicios de analytics, publicidad ni seguimiento.</li>
+      <li>No se utilizan servicios de publicidad ni seguimiento.</li>
     </ul>
 
     <h2>3. Información almacenada localmente</h2>
@@ -140,58 +141,72 @@
     </p>
     <ul>
       <li><strong>Identificadores de dispositivos vinculados:</strong> el código
-        de serie y la dirección MAC Bluetooth de cada mesa vinculada.</li>
+        de serie y la dirección Bluetooth de cada dispositivo vinculado.</li>
+      <li><strong>Clave de autorización:</strong> la clave incluida en el QR
+        de la etiqueta, necesaria para que el dispositivo acepte órdenes.</li>
       <li><strong>Nombres personalizados:</strong> nombres que usted asigne a
-        sus mesas (ej: "Mesa oficina").</li>
-      <li><strong>Preferencias:</strong> presets de movimiento y ajustes de la
+        sus dispositivos (ej: "Mesa oficina").</li>
+      <li><strong>Preferencias:</strong> movimientos temporizados y ajustes de la
         aplicación.</li>
     </ul>
     <p>
       Estos datos se almacenan únicamente en el almacenamiento interno del
-      dispositivo (SharedPreferences) y <strong>nunca se envían a ningún
-      servidor</strong>. Al desinstalar la aplicación, estos datos se eliminan
-      automáticamente.
+      dispositivo y <strong>nunca se envían a nuestros servidores</strong>.
+      Pueden incluirse en la copia de seguridad del sistema (iCloud o Google)
+      si usted la tiene activada. Al desinstalar la aplicación, estos datos se
+      eliminan del dispositivo.
     </p>
 
     <h2>4. Permisos del dispositivo</h2>
-    <p>Smart Table solicita los siguientes permisos, todos para funcionalidad local:</p>
+    <p>MiHogar solicita los siguientes permisos, todos para funcionalidad local:</p>
 
     <ul>
       <li>
-        <strong>Bluetooth:</strong> necesario para conectar y controlar su mesa
-        elevable. La comunicación es directa dispositivo-a-dispositivo, sin
-        intermediarios.
+        <strong>Bluetooth / Dispositivos cercanos:</strong> necesario para
+        conectar y controlar sus dispositivos. La comunicación es directa
+        dispositivo-a-dispositivo, sin intermediarios.
+      </li>
+      <li>
+        <strong>Ubicación (solo Android 11 o anterior):</strong> esas versiones
+        de Android exigen este permiso para buscar dispositivos Bluetooth. La
+        aplicación no obtiene ni guarda su ubicación.
       </li>
       <li>
         <strong>Cámara:</strong> utilizada exclusivamente para escanear el
-        código QR de su mesa durante el proceso de vinculación. No se toman
+        código QR del dispositivo durante el proceso de vinculación. No se toman
         fotos ni se graba vídeo.
       </li>
       <li>
-        <strong>Micrófono y reconocimiento de voz:</strong> utilizado
-        exclusivamente para la función de comandos de voz ("subir", "bajar",
-        "parar"). El procesamiento de voz se realiza de forma local en su
-        dispositivo. No se graba ni se transmite audio.
+        <strong>Siri (solo iOS):</strong> permite crear comandos de voz para sus
+        dispositivos. El reconocimiento de voz lo realiza Apple según su propia
+        política de privacidad; la aplicación no accede al micrófono ni graba audio.
       </li>
     </ul>
 
     <h2>5. Compartición de datos con terceros</h2>
     <div class="highlight">
       <strong>No compartimos ningún dato con terceros.</strong> La aplicación no
-      contiene SDKs de publicidad, analytics ni redes sociales.
+      contiene SDKs de publicidad ni redes sociales.
     </div>
+    <p>
+      La lectura del código QR utiliza Google ML Kit, que procesa la imagen en
+      el propio dispositivo. ML Kit puede enviar a Google datos técnicos de
+      diagnóstico y rendimiento de la librería (no imágenes ni datos
+      personales), según se describe en
+      <a href="https://developers.google.com/ml-kit/terms" style="color: var(--accent)">sus condiciones</a>.
+    </p>
 
     <h2>6. Seguridad</h2>
     <p>
       Dado que no se recopilan ni transmiten datos personales, los riesgos de
-      seguridad de datos son mínimos. La comunicación Bluetooth entre la
-      aplicación y la mesa utiliza los mecanismos de seguridad estándar del
-      protocolo BLE del sistema operativo.
+      seguridad de datos son mínimos. En los dispositivos que la incorporan,
+      las órdenes por Bluetooth requieren la clave de autorización de la
+      etiqueta, de modo que solo quien la tiene puede controlarlos.
     </p>
 
     <h2>7. Menores de edad</h2>
     <p>
-      Smart Table no está dirigida a menores de 13 años y no recopila
+      MiHogar no está dirigida a menores de 13 años y no recopila
       intencionadamente información de menores. La aplicación controla
       maquinaria motorizada y debe ser utilizada por adultos.
     </p>
@@ -213,7 +228,7 @@
     </div>
 
     <div class="footer">
-      © 2026 Daniel Martínez Salinas · Smart Table App
+      © 2026 Daniel Martínez Salinas · MiHogar
     </div>
   </div>
 </body>

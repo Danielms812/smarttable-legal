@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Table — Privacy Policy</title>
+  <title>MiHogar — Privacy Policy</title>
   <style>
     :root {
       --bg: #1A1A2E;
@@ -106,14 +106,14 @@
     </div>
 
     <h1>Privacy Policy</h1>
-    <p class="subtitle">Smart Table — Last updated: April 1, 2026</p>
+    <p class="subtitle">MiHogar — Last updated: October 6, 2026</p>
 
     <h2>1. Introduction</h2>
     <p>
-      <strong>Smart Table</strong> is a mobile application developed by
+      <strong>MiHogar</strong> is a mobile application for iOS and Android developed by
       <strong>Daniel Martínez Salinas</strong> that allows users to control
-      motorized standing desks via a direct Bluetooth Low Energy (BLE)
-      connection.
+      standing desks, wall beds and lights via a direct Bluetooth Low Energy
+      (BLE) connection.
     </p>
     <p>
       This privacy policy describes how the application handles user
@@ -123,15 +123,15 @@
 
     <h2>2. Data We Collect</h2>
     <div class="highlight">
-      <strong>Smart Table does not collect, store, or transmit any personal
-      data to external servers.</strong>
+      <strong>MiHogar does not collect, store, or transmit any personal
+      data to our servers.</strong>
     </div>
     <p>The application works entirely locally on your device:</p>
     <ul>
-      <li>There are no cloud servers or Internet connections.</li>
+      <li>We run no cloud servers: control is direct over Bluetooth.</li>
       <li>No user accounts are created.</li>
       <li>No personally identifiable information is collected.</li>
-      <li>No analytics, advertising, or tracking services are used.</li>
+      <li>No advertising or tracking services are used.</li>
     </ul>
 
     <h2>3. Information Stored Locally</h2>
@@ -141,58 +141,71 @@
     </p>
     <ul>
       <li><strong>Paired device identifiers:</strong> the serial code and
-        Bluetooth MAC address of each paired desk.</li>
-      <li><strong>Custom names:</strong> names you assign to your desks
+        Bluetooth address of each paired device.</li>
+      <li><strong>Authorization key:</strong> the key included in the label's
+        QR code, required for the device to accept commands.</li>
+      <li><strong>Custom names:</strong> names you assign to your devices
         (e.g., "Office desk").</li>
-      <li><strong>Preferences:</strong> movement presets and application
+      <li><strong>Preferences:</strong> timed movements and application
         settings.</li>
     </ul>
     <p>
-      This data is stored only in the device's internal storage
-      (SharedPreferences) and is <strong>never sent to any server</strong>.
-      Uninstalling the application automatically deletes all this data.
+      This data is stored only in the device's internal storage and is
+      <strong>never sent to our servers</strong>. It may be included in the
+      system backup (iCloud or Google) if you have it enabled. Uninstalling
+      the application deletes this data from the device.
     </p>
 
     <h2>4. Device Permissions</h2>
-    <p>Smart Table requests the following permissions, all for local functionality only:</p>
+    <p>MiHogar requests the following permissions, all for local functionality only:</p>
 
     <ul>
       <li>
-        <strong>Bluetooth:</strong> required to connect to and control your
-        standing desk. Communication is direct device-to-device, with no
+        <strong>Bluetooth / Nearby devices:</strong> required to connect to and
+        control your devices. Communication is direct device-to-device, with no
         intermediaries.
       </li>
       <li>
+        <strong>Location (Android 11 or earlier only):</strong> those Android
+        versions require this permission to scan for Bluetooth devices. The
+        application does not obtain or store your location.
+      </li>
+      <li>
         <strong>Camera:</strong> used exclusively to scan the QR code on your
-        desk during the pairing process. No photos are taken and no video is
+        device during the pairing process. No photos are taken and no video is
         recorded.
       </li>
       <li>
-        <strong>Microphone and Speech Recognition:</strong> used exclusively
-        for the voice command feature ("raise", "lower", "stop"). Voice
-        processing is performed locally on your device. No audio is recorded
-        or transmitted.
+        <strong>Siri (iOS only):</strong> lets you create voice commands for
+        your devices. Speech recognition is performed by Apple under its own
+        privacy policy; the application does not access the microphone or
+        record audio.
       </li>
     </ul>
 
     <h2>5. Third-Party Data Sharing</h2>
     <div class="highlight">
       <strong>We do not share any data with third parties.</strong> The
-      application does not contain advertising, analytics, or social media
-      SDKs.
+      application does not contain advertising or social media SDKs.
     </div>
+    <p>
+      QR code scanning uses Google ML Kit, which processes the image on the
+      device. ML Kit may send Google technical diagnostics and performance
+      data about the library (no images or personal data), as described in
+      <a href="https://developers.google.com/ml-kit/terms" style="color: var(--accent)">its terms</a>.
+    </p>
 
     <h2>6. Security</h2>
     <p>
       Since no personal data is collected or transmitted, data security risks
-      are minimal. The Bluetooth communication between the application and the
-      desk uses the standard BLE security mechanisms provided by the operating
-      system.
+      are minimal. On devices that support it, Bluetooth commands require the
+      authorization key on the label, so only whoever holds it can control
+      them.
     </p>
 
     <h2>7. Children's Privacy</h2>
     <p>
-      Smart Table is not intended for children under 13 and does not knowingly
+      MiHogar is not intended for children under 13 and does not knowingly
       collect information from minors. The application controls motorized
       equipment and should be used by adults only.
     </p>
@@ -214,7 +227,7 @@
     </div>
 
     <div class="footer">
-      © 2026 Daniel Martínez Salinas · Smart Table App
+      © 2026 Daniel Martínez Salinas · MiHogar
     </div>
   </div>
 </body>
